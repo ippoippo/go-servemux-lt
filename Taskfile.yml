@@ -1,0 +1,14 @@
+version: "3"
+
+tasks:
+  echo-run-server:
+    dir: demo
+    cmds:
+      - cmd: go run ./cmd/echoserver/main.go
+        ignore_error: true
+
+  standard-run-server:
+    dir: demo
+    cmds:
+      - cmd: go run ./cmd/stdserver/main.go
+        ignore_error: true
