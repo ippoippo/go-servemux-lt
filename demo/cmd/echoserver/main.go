@@ -17,6 +17,8 @@ import (
 )
 
 func main() {
+	// Setup our logging
+	// For convenience, will do something simple
 	logger := slogg.NewLogger()
 	slog.SetDefault(logger)
 
@@ -57,6 +59,9 @@ func setupMiddleware(e *echo.Echo) {
 	slog.Info("configuring middlware")
 
 	// Middleware Configuration
+	// ********************
+	// DEMO FEATURE POINT 4
+	// ********************
 	e.Use(middleware.Recover())       // Recover from panics (supplied by Echo)
 	e.Use(mware.AddXRequestIdToCtx()) // Add the XRequestId header to the ctx
 	e.Use(mware.RequestLogging())     // Log incoming requests

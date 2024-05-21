@@ -44,27 +44,33 @@ So, that led me to Echo.
 Let's look at a simple server implementation.
 There's no real implemention code. We'll just implement the router and some middleware only.
 
-[Show demo code]
-
 ---
 
-## Features
+## Features we may consider
 
 - 1: Routing (functions for specific http Methods): [https://echo.labstack.com/docs/quick-start#routing](https://echo.labstack.com/docs/quick-start#routing)
 - 2: Path Params: [https://echo.labstack.com/docs/quick-start#path-parameters](https://echo.labstack.com/docs/quick-start#path-parameters)
 - 3: Groups in Routing: [https://echo.labstack.com/docs/routing#group](https://echo.labstack.com/docs/routing#group)
-- 4: Middlware: [https://echo.labstack.com/docs/quick-start#middleware](https://echo.labstack.com/docs/quick-start#middleware)
+- 4: Middleware: [https://echo.labstack.com/docs/quick-start#middleware](https://echo.labstack.com/docs/quick-start#middleware)
   - Convenient and easily understandable interface to add middlware
 
 ---
+
+## CODE DEMO
+
+---
+![bg fit left](./goblog-20240213-0001.png)
 
 ## ... and the Standard Library?
 
 Although code reuse has it's benefits, there are also costs. Russ Cox (co-creator) of Go has discussed this before ( [https://research.swtch.com/deps](https://research.swtch.com/deps) )
 
 Can we easily achieve the same using the new Standard Library only?
+Ref: [https://go.dev/blog/routing-enhancements](https://go.dev/blog/routing-enhancements)
 
-[Show demo code]
+---
+
+## CODE DEMO
 
 ---
 
@@ -72,24 +78,32 @@ Can we easily achieve the same using the new Standard Library only?
 
 > "is there any reason now to consider 3rd party frameworks?"
 
+Has the new standard library filled the gaps we had?
+
 - 1: Routing (functions for specific http Methods)
-  - Yes, but prone to failure?
+  - Yes. It's an improvement.
+  - But, lack of compile time "safety"
+
+```golang
+notesGroup.GET("/:id", routes.GetNote) // ECHO
+
+notesGroup.HandleFunc("GET /notes/{id}", routes.GetNote) // Go 1.22 std lib
+```
+
 - 2: Path Params
-  - Yes, seems to support our needs
+  - Yes. This is is much needed improvement over pre Go1.22
 
 ---
 
 ## Review (2)
 
-> "is there any reason now to consider 3rd party frameworks?"
-
 - 3: Groups in Routing
   - This has always been possible pre-Go1.22
   - But the way to setup is not as obvious
-    - We could write our own abstration?
+    - We could write our own abstraction?
 - 4: Middlware
   - Again, this has always been possible pre-Go1.22
-    - We could write our own abstration?
+    - We could write our own abstraction?
 
 ---
 
@@ -109,14 +123,17 @@ I agree with this, I like my handler functions taking the form `func CreateNote(
 - This was code presented by [Anthony GG](https://youtu.be/aS1cJfQ-LrQ?si=yNIrI3bBawTLDg-e&t=392)
 - It shows how we can wrap the Handler functions ourselves instead of relying on a library
 
-![Screenshot](./centralised_error.png)
+![bg fit left](./centralised_error.png)
 
 ---
+
+![bg fit left](./echo_code.png)
 
 ## Echo's current status
 
 - Version 5 is taking time; [ticket reference from 2001](https://github.com/labstack/echo/discussions/2000)
   - It's router is not taking advantage of the new features from `net/http`
+    - The code is well tested, but ...
   - This would simplify Echo so we can easily take advantage of it's "quality of life" abstractions such as middlware and grouping etc.
 
 ---
@@ -128,3 +145,5 @@ I agree with this, I like my handler functions taking the form `func CreateNote(
   - Larger projects with more complex middleware and routing requirements, I would still probably stick with Echo for now, and watch what else emerges.
 - Recently (in the last 4 days), I found "Michi".
   - [https://github.com/go-michi/michi](https://github.com/go-michi/michi)
+  - May be worth considering
+  - I've also asked the Echo developers about this approach.

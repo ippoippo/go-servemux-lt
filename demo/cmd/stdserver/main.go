@@ -14,10 +14,12 @@ import (
 )
 
 func main() {
+	// Setup our logging
+	// For convenience, will do something simple
 	logger := slogg.NewLogger()
 	slog.SetDefault(logger)
 
-	//
+	// Create Server
 	srv := &http.Server{
 		Addr:    ":1323",
 		Handler: setupMux(),
@@ -64,6 +66,9 @@ func setupMux() *http.ServeMux {
 }
 
 func withMiddlware(f http.Handler) http.Handler {
+	// ********************
+	// DEMO FEATURE POINT 4
+	// ********************
 	return mware.JsonContentType(
 		mware.AddXRequestIdToCtx(
 			mware.RequestLogging(
@@ -73,10 +78,17 @@ func withMiddlware(f http.Handler) http.Handler {
 func withRoutes(mux *http.ServeMux) *http.ServeMux {
 	slog.Info("configuring routes")
 
+	// Routes Configuration
+	// **********************
+	// DEMO FEATURE POINT 1&3
+	// **********************
 	// Setup a group for an entity
 	notesGroup := http.NewServeMux()
 	// Lets assume these endpoints are not authenticated
 	notesGroup.HandleFunc("GET /notes", routes.GetAllNotes)
+	// ********************
+	// DEMO FEATURE POINT 2
+	// ********************
 	notesGroup.HandleFunc("GET /notes/{id}", routes.GetNote)
 
 	// Lets assume these endpoints need to be authenticated
@@ -88,9 +100,16 @@ func withRoutes(mux *http.ServeMux) *http.ServeMux {
 	// The above does not cause a compile time problem
 
 	// Setup API version
+	// Routes Configuration
+	// **********************
+	// DEMO FEATURE POINT 1
+	// **********************
 	v1Api := http.NewServeMux()
 	v1Api.Handle("/", notesGroup)
 
+	// ********************
+	// DEMO FEATURE POINT 4
+	// ********************
 	mux.Handle("/v1/", withMiddlware(http.Handler(http.StripPrefix("/v1", v1Api))))
 	return mux
 }
