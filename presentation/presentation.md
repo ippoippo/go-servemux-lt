@@ -131,7 +131,7 @@ I agree with this, I like my handler functions taking the form `func CreateNote(
 
 ## Echo's current status
 
-- Version 5 is taking time; [ticket reference from 2001](https://github.com/labstack/echo/discussions/2000)
+- Version 5 is taking time; [ticket reference from 2021](https://github.com/labstack/echo/discussions/2000)
   - It's router is not taking advantage of the new features from `net/http`
     - The code is well tested, but ...
   - This would simplify Echo so we can easily take advantage of it's "quality of life" abstractions such as middlware and grouping etc.
